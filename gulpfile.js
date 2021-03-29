@@ -39,9 +39,9 @@ var gulp = require('gulp'),
       });
       
       // Default task
-      gulp.task('default', ['browser-sync'], function() {
-          gulp.start('sass:watch');
-      });
+      gulp.task('default', gulp.series('browser-sync', function() {
+        gulp.start('sass:watch');
+    }));
 
       // Clean
       gulp.task('clean', function() {
@@ -75,6 +75,6 @@ gulp.task('imagemin', function() {
      .pipe(gulp.dest('dist/'));
  });
  
- gulp.task('build',['clean'], function() {
-     gulp.start('copyfonts','imagemin','usemin');
- });
+ gulp.task('build', gulp.series('clean', async function() {
+     gulp.series(gulp.parallel('copyfonts','imagemin','usemin'));
+ }));
